@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6236727935781087"
+     crossorigin="anonymous"></script> 
+<meta content='ca-pub-6236727935781087' name='google-adsense-account'/>      
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Texto com Funções Avançadas</title>
+    <style>
+        :root {
+            --cor-principal: #6A0DAD; /* Roxo */
+            --cor-secundaria: #FFD700; /* Amarelo */
+            --cor-terciaria: #00BFFF; /* Azul */
+            --cor-fundo: #f5f5f5;
+            --cor-texto: #333;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--cor-principal);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .container {
+            padding: 1rem;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            border: 2px solid var(--cor-principal);
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .stats {
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .actions input, .actions button {
+            padding: 0.5rem;
+            border: 2px solid var(--cor-principal);
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: var(--cor-principal);
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: var(--cor-secundaria);
+        }
+
+        .menu, footer {
+            background-color: var(--cor-principal);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .menu a, footer a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        .menu a:hover, footer a:hover {
+            color: var(--cor-secundaria);
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 2px solid var(--cor-principal);
+            padding: 1rem;
+            z-index: 1000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .popup.active {
+            display: block;
+        }
+
+        .popup .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        #social-links {
+            margin-top: 1rem;
+        }
+
+        #social-links a {
+            margin: 0 5px;
+        }
+
+        @media (max-width: 600px) {
+            .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>Editor de Texto com Funções Avançadas</header>
+
+    <div class="menu">
+        <a href="#" onclick="openPopup('home')">Home</a>
+        <a href="#" onclick="openPopup('contato')">Contato</a>
+        <a href="#" onclick="openPopup('dmca')">DMCA</a>
+    </div>
+
+    <div class="container">
+        <textarea id="text-area" placeholder="Digite seu texto aqui..."></textarea>
+        
+        <div class="stats">
+            <span id="char-count">Caracteres: 0</span> | 
+            <span id="word-count">Palavras: 0</span> | 
+            <span id="line-count">Linhas: 0</span>
+        </div>
+
+        <div class="actions">
+            <input type="text" id="search-word" placeholder="Palavra para localizar">
+            <button onclick="searchWord()">Localizar</button>
+        </div>
+
+        <div class="actions">
+            <input type="text" id="replace-word" placeholder="Nova palavra">
+            <button onclick="replaceOne()">Substituir uma</button>
+            <button onclick="replaceAll()">Substituir todas</button>
+        </div>
+    </div>
+
+    <footer>
+        <a href="#" onclick="openPopup('home')">Home</a> |
+        <a href="#" onclick="openPopup('dmca')">DMCA</a>
+
+        <div id="social-links">
+            <a href="https://facebook.com" target="_blank">Facebook</a>
+            <a href="https://whatsapp.com" target="_blank">WhatsApp</a>
+            <a href="https://twitter.com" target="_blank">Twitter</a>
+            <a href="https://pinterest.com" target="_blank">Pinterest</a>
+        </div>
+    </footer>
+
+    <!-- Popups -->
+    <div id="popup-home" class="popup">
+        <span class="close-btn" onclick="closePopup()">X</span>
+        <p>Bem-vindo à página Home!</p>
+    </div>
+
+    <div id="popup-contato" class="popup">
+        <span class="close-btn" onclick="closePopup()">X</span>
+        <p>Entre em contato conosco pelo email contato@exemplo.com</p>
+    </div>
+
+    <div id="popup-dmca" class="popup">
+        <span class="close-btn" onclick="closePopup()">X</span>
+        <p>Informações sobre DMCA.</p>
+    </div>
+
+    <script>
+        const textArea = document.getElementById('text-area');
+        const charCount = document.getElementById('char-count');
+        const wordCount = document.getElementById('word-count');
+        const lineCount = document.getElementById('line-count');
+
+        textArea.addEventListener('input', updateCounts);
+
+        function updateCounts() {
+            const text = textArea.value;
+            charCount.textContent = 'Caracteres: ' + text.length;
+            wordCount.textContent = 'Palavras: ' + (text.match(/\b\S+\b/g) || []).length;
+            lineCount.textContent = 'Linhas: ' + text.split(/\r\n|\r|\n/).length;
+        }
+
+        function searchWord() {
+            const searchWord = document.getElementById('search-word').value;
+            const text = textArea.value;
+            if (searchWord) {
+                const index = text.indexOf(searchWord);
+                if (index !== -1) {
+                    textArea.focus();
+                    textArea.setSelectionRange(index, index + searchWord.length);
+                } else {
+                    alert('Palavra não encontrada!');
+                }
+            }
+        }
+
+        function replaceOne() {
+            const searchWord = document.getElementById('search-word').value;
+            const replaceWord = document.getElementById('replace-word').value;
+            const text = textArea.value;
+            if (searchWord && replaceWord) {
+                textArea.value = text.replace(searchWord, replaceWord);
+            }
+        }
+
+        function replaceAll() {
+            const searchWord = document.getElementById('search-word').value;
+            const replaceWord = document.getElementById('replace-word').value;
+            const text = textArea.value;
+            if (searchWord && replaceWord) {
+                textArea.value = text.split(searchWord).join(replaceWord);
+            }
+        }
+
+        function openPopup(type) {
+            closePopup();
+            document.getElementById('popup-' + type).classList.add('active');
+        }
+
+        function closePopup() {
+            document.querySelectorAll('.popup').forEach(popup => popup.classList.remove('active'));
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.popup') && !event.target.closest('.menu a')) {
+                closePopup();
+            }
+        }
+    </script>
+</body>
+</html>
